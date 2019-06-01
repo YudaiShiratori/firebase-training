@@ -1,0 +1,65 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write;
+    }
+
+    match /version/{versionId} {
+      match /user/{userId} {
+        allow read: if request.auth != null;
+        allow write: if request.auth != null && request.auth.uid == userId;
+        match /secret/{secretId} {
+          allow read, write: if isAuthenticated() &&  isUserAuthenticated(userId);
+        }
+      }
+
+      function isAuthenticated() {
+        return request.auth != null;
+      }
+      function isUserAuthenticated(id) {
+        return request.auth.uid == id;
+      }
+
+
+
+      match /memo/{memoId} {
+        allow read, write: if true;
+      }
+      match /shopitem/{shopitemId} {
+        allow read, write: if true;
+      }
+      match /userpractice/{userpracticeId} {
+        allow read, write: if true;
+        match /health/{healthId} {
+          allow read, write: if true;
+        }
+      }
+      function getUserAccount(userId) {
+        return get(/databases/$(database)/documents/version/$(versionId)/user/$(userId));
+      }
+
+      match /group/{groupId} {
+        allow read: if isAuthenticated();
+
+        allow create, update: if isAuthenticated() && isUserAuthenticated(getUserAccount(request.auth.uid).data.uid);
+
+        allow delete: if false;
+      }
+
+      function articleValidation() {
+        return request.resource.data.text != '';
+      }
+
+      match /article/{articleId} {
+        allow read: if isAuthenticated();
+
+        allow create, update: if isAuthenticated() &&
+                                isUserAuthenticated(getUserAccount(request.auth.uid).data.uid) &&
+                                articleValidation();
+
+        allow delete: if isAuthenticated() &&
+                        isUserAuthenticated(getUserAccount(request.auth.uid).data.uid);
+      }
+    }
+  }
+}
