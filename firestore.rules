@@ -60,6 +60,9 @@ service cloud.firestore {
         allow delete: if isAuthenticated() &&
                         isUserAuthenticated(getUserAccount(request.auth.uid).data.uid);
       }
+      match /userstorage/{userstorageId} {
+        allow read, write: if true;
+      }
     }
   }
 }

@@ -29,6 +29,11 @@ service firebase.storage {
           allow read, write: if true;
         }
       }
+      match /userstorage/{userstorageId} {
+        match /{fileId} {
+          allow read, write: if true;
+        }
+      }
     }
   }
 }
