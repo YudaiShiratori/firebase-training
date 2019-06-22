@@ -321,7 +321,7 @@ export default class RosterListPage extends Vue {
       //   sex: this.sex,
       //   isPublished: this.isPublished,
       // })
-      UserPractice.save()
+      // UserPractice.save()
     } catch (error) {
       console.error('firebase error', error)
     }

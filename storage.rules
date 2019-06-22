@@ -5,7 +5,7 @@ service firebase.storage {
         return request.auth != null;
       }
       function isUserAuthenticated() {
-        return request.auth.uid = id;
+        return request.auth.uid == id;
       }
       function limitSize() {
         //ファイルが3Mbyte以下

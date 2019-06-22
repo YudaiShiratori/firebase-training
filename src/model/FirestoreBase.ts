@@ -2,13 +2,13 @@ import firebase from 'firebase/app';
 
 async function getCollectionSample() {
   const users: UserPractice[] = [];
-  const items: firebase.firestore.QuerySnapshot = await this.db.collection(UserPractice.path).get();
-  items.docs.forEach((item: firebase.firestore.QueryDocumentSnapshot) => {
-    if (item.exists) {
-      const user = new UserPractice(item.id, item.data());
-      users.push(user);
-    }
-  });
+  // const items: firebase.firestore.QuerySnapshot = await this.db.collection(UserPractice.path).get();
+  // items.docs.forEach((item: firebase.firestore.QueryDocumentSnapshot) => {
+  //   if (item.exists) {
+  //     const user = new UserPractice(item.id, item.data());
+  //     users.push(user);
+  //   }
+  // });
 }
 
 class UserPractice {
