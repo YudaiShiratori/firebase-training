@@ -4,7 +4,6 @@ import * as corsLib from 'cors'
 // import { request } from 'https';
 import UserController from './controller/UserController'
 import Result from './Result'
-import { async } from 'q';
 
 const app = express()
 const cors = corsLib()
@@ -61,7 +60,7 @@ router.use('/user', async (request, response) => {
       result = await new UserController().deleteUser(request.body)
     }
   } catch(error) {
-    throw error
+    result = { code: 400, message: error.message, error: error }
   }
-  return result
-}
+  response.status(result.code).send(result)
+})

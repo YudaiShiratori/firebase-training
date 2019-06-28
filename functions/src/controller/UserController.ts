@@ -70,7 +70,7 @@ export default class UserController {
 
       const collection = firestore().collection(UserController.path)
       const document = collection.doc(id)
-      const batch = firetore().batch()
+      const batch = firestore().batch()
       const dateAt = firestore.Timestamp.fromDate(new Date())
       const data = {
         name: name,
@@ -105,3 +105,4 @@ export default class UserController {
     }
     return result
   }
+}
