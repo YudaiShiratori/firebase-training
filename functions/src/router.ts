@@ -2,6 +2,9 @@ import * as functions from 'firebase-functions'
 import * as express from 'express'
 import * as corsLib from 'cors'
 // import { request } from 'https';
+import UserController from './controller/UserController'
+import Result from './Result'
+import { async } from 'q';
 
 const app = express()
 const cors = corsLib()
@@ -42,3 +45,23 @@ app.use('/v1', router)
 const api = functions.https.onRequest(app)
 
 export { api }
+
+
+//トリガー
+router.use('/user', async (request, response) => {
+  let result: Result = { code: 200, message: '' }
+  try {
+    if (request.method === 'GET') {
+      result = await new UserController().getUsers()
+    } else if (request.method === 'POST') {
+      result = await new UserController().createUser(request.body)
+    } else if (request.method === 'PUT') {
+      result = await new UserController().updateUser(request.body)
+    } else if (request.method === 'DELETE') {
+      result = await new UserController().deleteUser(request.body)
+    }
+  } catch(error) {
+    throw error
+  }
+  return result
+}
