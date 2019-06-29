@@ -2,6 +2,8 @@ import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 import * as router from './router'
 
+import UserController from './controller/UserController'
+
 admin.initializeApp()
 export const helloWorld = functions.https.onRequest((request, response) => {
   response.send('Hello')
@@ -31,3 +33,32 @@ export const requestTest = functions.https.onRequest((request, response) => {
 })
 
 export const api = router.api
+
+
+export const createUser = 
+  functions.region('asia-northeast').firestore
+   .document(UserController.wildPath)
+   .onCreate((snapshot: FirebaseFirestore.DocumentSnapshot, context: functions.EventContext) => {
+     console.log('onCreate context', context)
+     console.log('snapshot', snapshot)
+     return true
+   })
+
+export const updateUser = 
+  functions.region('asia-northeast').firestore
+   .document(UserController.wildPath)
+   .onUpdate((change: functions.Change<FirebaseFirestore.DocumentSnapshot>, context: functions.EventContext) => {
+     console.log('update context', context)
+     console.log('change before', change.before)
+     console.log('chenage after', change.after)
+     return true
+   })
+
+export const deleteUser =
+  functions.region('asia-northeast').firestore
+   .document(UserController.wildPath)
+   .onDelete((snapshot: FirebaseFirestore.DocumentSnapshot, contect: functions.EventContext) => {
+     console.log('onDelete context', context)
+     console.log('snapshot', snapshot)
+     return true
+   })
